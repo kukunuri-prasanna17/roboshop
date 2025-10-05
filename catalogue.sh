@@ -55,31 +55,35 @@ validate $? "Creating app directory"
 cd /app 
 validate $? "Changing app directory"
 
+rm -rf /app/*
+validate $? "Removing existing data"
+
 unzip /tmp/catalogue.zip &>>$LOG_FILE
 validate $? "Unzip catalogue"
 
 npm install &>>$LOG_FILE
 validate $? "Install dependecies"
 
-
 cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
 validate $? "Copy systemctl service"
-
 
 systemctl daemon-reload
 systemctl enable catalogue &>>$LOG_FILE
 validate $? "Enable catalogue "
 
-
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo 
 validate $? "Copy mongo repo"
-
 
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 validate $? "Install mongodb client"
 
-mongosh --host $MONGODB_HOST  </app/db/master-data.js  &>>$LOG_FILE
-validate $? "Load catalogue product"
+INDEX=$(mongosh mongodb.daws86s.fun --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')")
+if [ $INDEX -le 0]; then
+  mongosh --host $MONGODB_HOST  </app/db/master-data.js  &>>$LOG_FILE
+  validate $? "Load catalogue product"
+else 
+   echo -e "catalogue products already loaded ....$Y SKIPPING $N"
+fi
 
 systemctl restart catalogue 
 validate $? "Restarted catalogue"
