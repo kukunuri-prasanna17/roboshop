@@ -25,23 +25,25 @@ fi
 dnf module disable nodejs -y &>>$LOG_FILE
 dnf module enable nodejs:20 -y &>>$LOG_FILE
 dnf install nodejs -y &>>$LOG_FILE
+  echo "Installing nodejs ....$Y SUCCESS $N"
 
 id roboshop  &>>$LOG_FILE
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop  &>>$LOG_FILE
 else
-    echo "User already exists"
+    echo "User already exists ....$Y SKIPPING $N"
 fi
+### CREATING DIRECTORY ###
 mkdir -p /app 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip  &>>$LOG_FILE
 cd /app 
 rm -rf /app/*
-
 unzip /tmp/catalogue.zip &>>$LOG_FILE
-
 npm install &>>$LOG_FILE
+ echo " Created folder and dowloaded code into it .... $G SUCCESS $N"
 
 cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
+    echo "Creating catalogue service ....$G SUCCESS $N"
 
 systemctl daemon-reload
 systemctl enable catalogue &>>$LOG_FILE
@@ -52,6 +54,7 @@ INDEX=$(mongosh mongodb.daws86s.cfd --quiet --eval "db.getMongo().getDBNames().i
 if [ $INDEX -le 0 ]; then
   mongosh --host $MONGODB_HOST  </app/db/master-data.js  &>>$LOG_FILE
 else 
-   echo -e "catalogue products already loaded ....$Y SKIPPING $N"
+   echo -e "catalogue products already loaded ....$G SKIPPING $N"
 fi
 systemctl restart catalogue 
+ echo " Created client server .... $G SUCCESS $N"
