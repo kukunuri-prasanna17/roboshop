@@ -55,9 +55,6 @@ validate $? "Creating app directory"
 cd /app 
 validate $? "Changing app directory"
 
-rm -rf /app*
-validate $? "Removing existing code"
-
 unzip /tmp/catalogue.zip &>>$LOG_FILE
 validate $? "Unzip catalogue"
 
@@ -81,7 +78,7 @@ validate $? "Copy mongo repo"
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 validate $? "Install mongodb client"
 
-mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
+mongosh --host $MONGODB_HOST  </app/db/master-data.js  &>>$LOG_FILE
 validate $? "Load catalogue product"
 
 systemctl restart catalogue 
