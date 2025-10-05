@@ -32,15 +32,20 @@ validate(){
 dnf install mysql-server -y  &>>$LOG_FILE
 validate $? "Installed mysql"
 
-systemctl enable mysqld  &>>$LOG_FILE
+systemctl enable mysqld   &>>$LOG_FILE
 validate $? "Enabled mysqld"
 
 systemctl start mysqld   &>>$LOG_FILE
 validate $? "started mysqld"
 
-mysql_secure_installation --set-root-pass RoboShop@1
-validate $? "Created root user with password"
+id root
+if [ $? -ne 0 ]; then
+   mysql_secure_installation --set-root-pass RoboShop@1
+   validate $? "Created root user with password"
+else
+   echo -e "Root user already exists ... $Y SKIPPING $N"
+fi
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
-echo "Script excuted in: $Y $TOTAL_TIME Seconds $N"
+echo -e "Script excuted in: $Y $TOTAL_TIME Seconds $N"
