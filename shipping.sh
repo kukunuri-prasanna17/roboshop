@@ -10,7 +10,7 @@ LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
 SCRIPT_DIR=$PWD
 MONGODB_HOST=mongodb.daws86s.cfd
-LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"# /var/log/shell-roboshop/shipping.log
+LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" # /var/log/shell-roboshop/shipping.log
 MYSQL_HOST=mysql.daws.cfd
 
 mkdir -p $LOGS_FOLDER
@@ -29,7 +29,7 @@ validate(){
     fi 
 }
 
-dnf install maven -y
+dnf install maven -y  &>>$LOG_FILE
 validate $? "Installing maven"
 
 id roboshop  &>>$LOG_FILE
