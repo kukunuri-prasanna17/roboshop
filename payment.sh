@@ -27,7 +27,7 @@ validate(){
     fi 
 }
 
-dnf install python3 gcc python3-devel -y
+dnf install python3 gcc python3-devel -y &>>$LOG_FILE
 
 id roboshop  &>>$LOG_FILE
 if [ $? -ne 0 ]; then
@@ -49,8 +49,8 @@ validate $? "Changing app directory"
 rm -rf /app/*
 validate $? "Removing existing data"
 
-unzip /tmp/user.zip &>>$LOG_FILE
-validate $? "Unzip user"
+unzip /tmp/payment.zip &>>$LOG_FILE
+validate $? "Unzip payment"
 
 pip3 install -r requirements.txt &>>$LOG_FILE
 validate $? "Install dependecies"
