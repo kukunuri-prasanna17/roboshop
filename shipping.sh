@@ -58,19 +58,15 @@ validate $? "Unzip shipping"
 mvn clean package &>>$LOG_FILE
 mv target/shipping-1.0.jar shipping.jar
 
-cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service
-
+cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service  &>>$LOG_FILE
 systemctl daemon-reload
 systemctl enable shipping
 validate $? "Enabled shipping" &>>$LOG_FILE
 
-systemctl start shipping
-validate $? "Stared shipping"
-
 dnf install mysql -y  &>>$LOG_FILE
 validate $? "Installing mysql client"
 
-mysql -h $MYSQL_HOST -uroot -pRoboshop@1 -e 'use cities'
+mysql -h $MYSQL_HOST -uroot -pRoboShop@1 -e 'use cities'
 if [ $? -ne 0 ]; then
     mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_FILE
     mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/app-user.sql  &>>$LOG_FILE
