@@ -11,7 +11,7 @@ SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
 SCRIPT_DIR=$PWD
 MONGODB_HOST=mongodb.daws86s.cfd
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" # /var/log/shell-roboshop/shipping.log
-MYSQL_HOST=mysql.daws.cfd
+MYSQL_HOST=mysql.daws86s.cfd
 
 mkdir -p $LOGS_FOLDER
 echo "Script started excuted at: $(date)" | tee -a $LOG_FILE
