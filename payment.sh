@@ -56,13 +56,11 @@ pip3 install -r requirements.txt &>>$LOG_FILE
 validate $? "Install dependecies"
 
 cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service 
-validate $? "Copy systemctl service"
-
 systemctl daemon-reload
-systemctl enable user &>>$LOG_FILE
-validate $? "Enable user"
+systemctl enable payment &>>$LOG_FILE
+validate $? "Enable payment"
 
-systemctl restart user 
-validate $? "Restarted user"
+systemctl restart payment 
+validate $? "Restarted payment"
 
 
